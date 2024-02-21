@@ -27,3 +27,7 @@ export async function createUser(params) {
 export async function deleteUser(email) {
   return UserModel.deleteOne({ email: email });
 }
+
+export async function findUserByEmail(email) {
+  return UserModel.findOne({ email: email });
+}

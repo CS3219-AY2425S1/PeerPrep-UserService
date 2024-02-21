@@ -2,10 +2,11 @@ import express from "express";
 
 import { createUser } from "../controller/user-controller.js";
 import { deleteUser } from "../controller/user-controller.js";
+import { getUserByEmail } from "../controller/user-controller.js";
 
 const router = express.Router();
 
-// router.get("/", getAllUsers);
+router.get("/", getUserByEmail);
 
 // router.patch("/update-privilege", updateUserPrivilege);
 

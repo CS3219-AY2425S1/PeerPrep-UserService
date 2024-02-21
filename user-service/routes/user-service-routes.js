@@ -3,6 +3,7 @@ import express from "express";
 import { createUser } from "../controller/user-controller.js";
 import { deleteUser } from "../controller/user-controller.js";
 import { getUserByEmail } from "../controller/user-controller.js";
+import { updateUser } from "../controller/user-controller.js";
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.get("/", getUserByEmail);
 
 router.post("/", createUser);
 
-// router.patch("/:userId", updateUserData);
+router.patch("/", updateUser);
 
 router.delete("/", deleteUser);
 

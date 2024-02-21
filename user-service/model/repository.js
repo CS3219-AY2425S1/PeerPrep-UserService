@@ -31,3 +31,16 @@ export async function deleteUser(email) {
 export async function findUserByEmail(email) {
   return UserModel.findOne({ email: email });
 }
+
+export async function updateUser(id, username, email, password) {
+  return UserModel.updateOne(
+    { _id: id },
+    {
+      $set: {
+        username: username,
+        email: email,
+        password: password,
+      },
+    }
+  );
+}

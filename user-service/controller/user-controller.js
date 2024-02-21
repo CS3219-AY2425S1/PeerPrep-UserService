@@ -1,9 +1,7 @@
-import {
-  ormCreateUser as _createUser,
-  ormFindUserByEmail,
-} from "../model/user-orm.js";
+import { ormCreateUser as _createUser } from "../model/user-orm.js";
 import { ormDeleteUser as _deleteUser } from "../model/user-orm.js";
 import { ormFindUserByEmail as _findUserByEmail } from "../model/user-orm.js";
+import { ormUpdateUser as _updateUser } from "../model/user-orm.js";
 
 import bcrypt from "bcrypt";
 
@@ -77,7 +75,7 @@ export async function getUserByEmail(req, res) {
     const { email } = req.body;
     if (email) {
       console.log(`GET USER: Email Obtained: ${email}`);
-      const response = await ormFindUserByEmail(email);
+      const response = await _findUserByEmail(email);
       console.log(response);
       if (response === null) {
         console.log(`User with ${email} not found!`);
@@ -104,3 +102,43 @@ export async function getUserByEmail(req, res) {
       .json({ message: "Database failure when getting user!" });
   }
 }
+
+export async function updateUser(req, res) {
+  try {
+    const { id, username, email, password } = req.body;
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+
+    if (id && username && email && hashedPassword) {
+      console.log(`UPDATE USER: ID Obtained: ${id}`);
+      const response = await _updateUser(id, username, email, hashedPassword);
+      console.log(response);
+      if (response.err) {
+        return res.status(400).json({
+          message: "Could not update the user (Possibly duplicate email)!",
+        });
+      } else if (!response) {
+        console.log(`User with id: ${id} not found!`);
+        return res
+          .status(404)
+          .json({ message: `User with id: ${id} not found!` });
+      } else {
+        console.log(`User with id: ${id} found!`);
+        return res.status(200).json({
+          message: `Updated User Data with id: ${id}!`,
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: "Email is missing!",
+      });
+    }
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Database failure when getting user!" });
+  }
+}
+
+export async function updateUserPrivilege(req, res) {}

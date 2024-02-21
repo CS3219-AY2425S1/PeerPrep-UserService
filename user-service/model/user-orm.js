@@ -3,6 +3,7 @@ import {
   deleteUser,
   findUserByEmail,
   updateUser,
+  updateUserPrivilege,
 } from "./repository.js";
 
 //need to separate orm functions from repository to decouple business logic from persistence
@@ -62,6 +63,23 @@ export async function ormUpdateUser(id, username, email, password) {
     return true;
   } catch (err) {
     console.log("ERROR: Could not update user data");
+    return { err };
+  }
+}
+
+export async function ormUpdateUserPrivilege(email, isAdmin) {
+  try {
+    const result = await updateUserPrivilege(email, isAdmin);
+    console.log(result);
+
+    // Checking if User Details Modified
+    if (result.modifiedCount === 0) {
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.log("ERROR: Could not update user privilege");
     return { err };
   }
 }

@@ -44,3 +44,14 @@ export async function updateUser(id, username, email, password) {
     }
   );
 }
+
+export async function updateUserPrivilege(email, isAdmin) {
+  return UserModel.updateOne(
+    { email: email },
+    {
+      $set: {
+        isAdmin: isAdmin,
+      },
+    }
+  );
+}

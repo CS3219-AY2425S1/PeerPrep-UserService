@@ -2,6 +2,7 @@ import { ormCreateUser as _createUser } from "../model/user-orm.js";
 import { ormDeleteUser as _deleteUser } from "../model/user-orm.js";
 import { ormFindUserByEmail as _findUserByEmail } from "../model/user-orm.js";
 import { ormUpdateUser as _updateUser } from "../model/user-orm.js";
+import { ormUpdateUserPrivilege as _updateUserPrivilege } from "../model/user-orm.js";
 
 import bcrypt from "bcrypt";
 
@@ -131,14 +132,50 @@ export async function updateUser(req, res) {
       }
     } else {
       return res.status(400).json({
-        message: "Email is missing!",
+        message: "id and/or Username and/or Email and/or Password are missing!",
       });
     }
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Database failure when getting user!" });
+    console.log(err);
+    return res.status(500).json({
+      message:
+        "Database failure when updating user! (Possibly Missing Password field)",
+    });
   }
 }
 
-export async function updateUserPrivilege(req, res) {}
+export async function updateUserPrivilege(req, res) {
+  try {
+    const { email, isAdmin } = req.body;
+
+    if (email && isAdmin) {
+      console.log(`UPDATE USER PRIVILEGE: Email Obtained: ${email}`);
+      const response = await _updateUserPrivilege(email, isAdmin);
+      console.log(response);
+      if (response.err) {
+        return res.status(400).json({
+          message: "Could not update the user privilege!",
+        });
+      } else if (!response) {
+        console.log(`User with email: ${email} not found!`);
+        return res
+          .status(404)
+          .json({ message: `User with email: ${email} not found!` });
+      } else {
+        console.log(`User with email: ${email} found!`);
+        return res.status(200).json({
+          message: `Updated User Privilege with email: ${email}!`,
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: " Email and/or isAdmin are missing!",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Database failure when updating user!",
+    });
+  }
+}

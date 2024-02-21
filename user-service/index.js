@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-// import { createUser } from "./controller/user-controller.js";
+import userRoutes from "./routes/user-service-routes.js";
 
 const app = express();
 
@@ -28,6 +28,8 @@ app.use((req, res, next) => {
   // Continue Route Processing
   next();
 });
+
+app.use("/users", userRoutes);
 
 app.get("/", (req, res, next) => {
   console.log("Sending Greetings!");

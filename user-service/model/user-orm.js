@@ -4,6 +4,7 @@ import {
   findUserByEmail,
   updateUser,
   updateUserPrivilege,
+  findAllUsers,
 } from "./repository.js";
 
 //need to separate orm functions from repository to decouple business logic from persistence
@@ -80,6 +81,22 @@ export async function ormUpdateUserPrivilege(email, isAdmin) {
     return true;
   } catch (err) {
     console.log("ERROR: Could not update user privilege");
+    return { err };
+  }
+}
+
+export async function ormFindAllUsers() {
+  try {
+    const result = await findAllUsers();
+
+    // Checking if Users exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not find users");
     return { err };
   }
 }

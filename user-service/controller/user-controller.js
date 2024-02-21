@@ -3,6 +3,7 @@ import { ormDeleteUser as _deleteUser } from "../model/user-orm.js";
 import { ormFindUserByEmail as _findUserByEmail } from "../model/user-orm.js";
 import { ormUpdateUser as _updateUser } from "../model/user-orm.js";
 import { ormUpdateUserPrivilege as _updateUserPrivilege } from "../model/user-orm.js";
+import { ormFindAllUsers as _findAllUsers } from "../model/user-orm.js";
 
 import bcrypt from "bcrypt";
 
@@ -176,6 +177,26 @@ export async function updateUserPrivilege(req, res) {
     console.log(err);
     return res.status(500).json({
       message: "Database failure when updating user!",
+    });
+  }
+}
+
+export async function getAllUsers(req, res) {
+  console.log(`GET ALL USERS`);
+
+  const response = await _findAllUsers();
+
+  console.log(response);
+
+  if (response === null) {
+    return res.status(404).json({ message: `No users exist!` });
+  } else if (response.err) {
+    return res.status(400).json({ message: "Could not find users!" });
+  } else {
+    console.log(`Users found!`);
+    return res.status(200).json({
+      message: `Found users!`,
+      users: response,
     });
   }
 }

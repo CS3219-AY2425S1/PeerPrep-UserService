@@ -11,7 +11,7 @@ import {
 export async function ormCreateUser(username, email, password) {
   try {
     const newUser = await createUser({ username, email, password });
-    newUser.save();
+    await newUser.save();
     return true;
   } catch (err) {
     console.log("ERROR: Could not create new user");

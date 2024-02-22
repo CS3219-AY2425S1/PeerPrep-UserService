@@ -19,9 +19,10 @@ export async function createUser(req, res) {
       const resp = await _createUser(username, email, hashedPassword);
       console.log(resp);
       if (resp.err) {
-        return res
-          .status(400)
-          .json({ message: "Could not create a new user!" });
+        return res.status(409).json({
+          message:
+            "Could not create a new user! (Possibly Username or Email Already Exists!)",
+        });
       } else {
         console.log(`Created new user ${username} successfully!`);
         return res
@@ -117,8 +118,9 @@ export async function updateUser(req, res) {
       const response = await _updateUser(id, username, email, hashedPassword);
       console.log(response);
       if (response.err) {
-        return res.status(400).json({
-          message: "Could not update the user (Possibly duplicate email)!",
+        return res.status(409).json({
+          message:
+            "Could not update the user (Possibly duplicate Username or Email)!",
         });
       } else if (!response) {
         console.log(`User with id: ${id} not found!`);

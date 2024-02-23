@@ -1,24 +1,27 @@
 import express from "express";
 
-import { createUser } from "../controller/user-controller.js";
-import { deleteUser } from "../controller/user-controller.js";
-import { getUserByEmail } from "../controller/user-controller.js";
-import { updateUser } from "../controller/user-controller.js";
-import { updateUserPrivilege } from "../controller/user-controller.js";
-import { getAllUsers } from "../controller/user-controller.js";
+import {
+  createUser,
+  deleteUser,
+  getAllUsers,
+  getUserByEmail,
+  updateUser,
+  updateUserPrivilege,
+} from "../controller/user-controller.js";
+import { verifyAccessToken, verifyEmail, verifyId, verifyIsAdmin } from "../middleware/basic-access-control.js";
 
 const router = express.Router();
 
-router.patch("/update-privilege", updateUserPrivilege);
+router.patch("/update-privilege", verifyAccessToken, verifyIsAdmin, updateUserPrivilege);
 
-router.get("/all", getAllUsers);
+router.get("/all", verifyAccessToken, verifyIsAdmin, getAllUsers);
 
-router.get("/", getUserByEmail);
+router.get("/", verifyAccessToken, verifyEmail, getUserByEmail);
 
 router.post("/", createUser);
 
-router.patch("/", updateUser);
+router.patch("/", verifyAccessToken, verifyId, updateUser);
 
-router.delete("/", deleteUser);
+router.delete("/", verifyAccessToken, verifyEmail, deleteUser);
 
 export default router;

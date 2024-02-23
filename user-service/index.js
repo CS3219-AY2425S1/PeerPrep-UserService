@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import userRoutes from "./routes/user-service-routes.js";
+import authRoutes from "./routes/auth-routes.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/users", userRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res, next) => {
   console.log("Sending Greetings!");

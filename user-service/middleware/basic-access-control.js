@@ -9,7 +9,7 @@ export function verifyAccessToken(req, res, next) {
 
   // request auth header: `Authorization: Bearer + <access_token>`
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
     if (err) {
       return res.status(401).json({ message: "Authentication failed" });
     }

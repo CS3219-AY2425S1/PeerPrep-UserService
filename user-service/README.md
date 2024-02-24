@@ -29,6 +29,7 @@ DB_CLOUD_URI=<CONNECTION_STRING>
 DB_LOCAL_URI=mongodb://localhost/${KEY_IN_YOUR_DB_HERE}
 PORT=3001
 ENV=PROD
+JWT_SECRET=you-can-replace-this-with-your-own-secret
 ```
 
 ## Running User Service
@@ -86,14 +87,26 @@ ENV=PROD
 }
 ```
 
+- <a name="auth-header">Headers:</a> Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the user's data.
+
+  - Auth Rules:
+
+    - Admin users: Can retrieve any user's data. The server verifies the user associated with the JWT token is an admin user and allows access to the requested user's data.
+
+    - Non-admin users: Can only retrieve their own data. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server returns the user's own data.
+
 - Responses:
 
-| Response Code               | Result                   |
-| --------------------------- | ------------------------ |
-| 200 (OK)                    | User Data Obtained       |
-| 400 (Bad Request)           | Missing Fields           |
-| 404 (Not Found)             | No Such User Exists      |
-| 500 (Internal Server Error) | Database or Server Error |
+| Response Code               | Result                                                   |
+| --------------------------- | -------------------------------------------------------- |
+| 200 (OK)                    | User Data Obtained                                       |
+| 400 (Bad Request)           | Missing Fields                                           |
+| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT         |
+| 403 (Forbidden)             | Access Denied for Non-admin Users Accessing Others' Data |
+| 404 (Not Found)             | No Such User Exists                                      |
+| 500 (Internal Server Error) | Database or Server Error                                 |
 
 ### Get All Users
 
@@ -105,13 +118,25 @@ ENV=PROD
 
 - Body: Not Required
 
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+
+  - Auth Rules:
+
+    - Admin users: Can retrieve all users' data. The server verifies the user associated with the JWT token is an admin user and allows access to all users' data.
+
+    - Non-admin users: Not allowed access.
+
 - Responses:
 
-| Response Code     | Result                   |
-| ----------------- | ------------------------ |
-| 200 (OK)          | Users Data Obtained      |
-| 400 (Bad Request) | Database or Server Error |
-| 404 (Not Found)   | No Users Exist           |
+| Response Code      | Result                                           |
+| ------------------ | ------------------------------------------------ |
+| 200 (OK)           | Users Data Obtained                              |
+| 400 (Bad Request)  | Database or Server Error                         |
+| 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
+| 403 (Forbidden)    | Access Denied for Non-admin Users                |
+| 404 (Not Found)    | No Users Exist                                   |
 
 ### Delete User
 
@@ -129,14 +154,26 @@ ENV=PROD
 }
 ```
 
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+
+  - Auth Rules:
+
+    - Admin users: Can delete any user's data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested user's data.
+
+    - Non-admin users: Can only delete their own data. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server deletes the user's own data.
+
 - Responses:
 
-| Response Code               | Result                    |
-| --------------------------- | ------------------------- |
-| 200 (OK)                    | User Deleted Successfully |
-| 400 (Bad Request)           | Missing Fields            |
-| 404 (Not Found)             | No Such User Exists       |
-| 500 (Internal Server Error) | Database or Server Error  |
+| Response Code               | Result                                                  |
+| --------------------------- | ------------------------------------------------------- |
+| 200 (OK)                    | User Deleted Successfully                               |
+| 400 (Bad Request)           | Missing Fields                                          |
+| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
+| 403 (Forbidden)             | Access Denied for Non-admin Users Deleting Others' Data |
+| 404 (Not Found)             | No Such User Exists                                     |
+| 500 (Internal Server Error) | Database or Server Error                                |
 
 ### Update User
 
@@ -157,15 +194,27 @@ ENV=PROD
 }
 ```
 
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+
+  - Auth Rules:
+
+    - Admin users: Can update any user's data. The server verifies the user associated with the JWT token is an admin user and allows the update of requested user's data.
+
+    - Non-admin users: Can only update their own data. The server checks if the id in the request body matches the id of the user associated with the JWT token. If it matches, the server updates the user's own data.
+
 - Responses:
 
-| Response Code               | Result                     |
-| --------------------------- | -------------------------- |
-| 200 (OK)                    | User Updated Successfully  |
-| 400 (Bad Request)           | Missing Fields             |
-| 404 (Not Found)             | No Such User Exists        |
-| 409 (Conflict)              | Duplicate Data Encountered |
-| 500 (Internal Server Error) | Database or Server Error   |
+| Response Code               | Result                                                  |
+| --------------------------- | ------------------------------------------------------- |
+| 200 (OK)                    | User Updated Successfully                               |
+| 400 (Bad Request)           | Missing Fields                                          |
+| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
+| 403 (Forbidden)             | Access Denied for Non-admin Users Updating Others' Data |
+| 404 (Not Found)             | No Such User Exists                                     |
+| 409 (Conflict)              | Duplicate Data Encountered                              |
+| 500 (Internal Server Error) | Database or Server Error                                |
 
 ### Update User Privilege
 
@@ -184,11 +233,62 @@ ENV=PROD
 }
 ```
 
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+
+  - Auth Rules:
+
+    - Admin users: Can update any user's privilege. The server verifies the user associated with the JWT token is an admin user and allows the privilege update.
+
+    - Non-admin users: Not allowed access.
+
 - Responses:
 
-| Response Code               | Result                              |
-| --------------------------- | ----------------------------------- |
-| 200 (OK)                    | User Privilege Updated Successfully |
-| 400 (Bad Request)           | Missing Fields                      |
-| 404 (Not Found)             | No Such User Exists                 |
-| 500 (Internal Server Error) | Database or Server Error            |
+| Response Code               | Result                                           |
+| --------------------------- | ------------------------------------------------ |
+| 200 (OK)                    | User Privilege Updated Successfully              |
+| 400 (Bad Request)           | Missing Fields                                   |
+| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT |
+| 403 (Forbidden)             | Access Denied for Non-admin Users                |
+| 404 (Not Found)             | No Such User Exists                              |
+| 500 (Internal Server Error) | Database or Server Error                         |
+
+### Login
+
+- This endpoint allows a user to authenticate with an email and password and returns a JWT access token. The token is valid for 1 day and can be used subsequently to access protected resources. For example usage, refer to the [Authorization header section in the Get User endpoint](#auth-header).
+- HTTP Method: `POST`
+- Endpoint: http://localhost:3001/auth/login/
+- Body: Required: email (string), password (string)
+
+```json
+{
+  "email": "sample@gmail.com",
+  "password": "SecurePassword"
+}
+```
+
+- Responses:
+
+| Response Code               | Result                      |
+| --------------------------- | --------------------------- |
+| 200 (OK)                    | Login Successful            |
+| 400 (Bad Request)           | Missing Fields              |
+| 401 (Unauthorized)          | Incorrect Email or Password |
+| 500 (Internal Server Error) | Database or Server Error    |
+
+### Verify Token
+
+- This endpoint allows one to verify a JWT access token to authenticate and retrieve the user's data associated with the token.
+- HTTP Method: `GET`
+- Endpoint: http://localhost:3001/auth/verify-token/
+- Body: Not Required
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+- Responses:
+
+| Response Code               | Result                                                |
+| --------------------------- | ----------------------------------------------------- |
+| 200 (OK)                    | Token Verified and Authenticated User's Data Obtained |
+| 401 (Unauthorized)          | Missing/Invalid/Expired JWT                           |
+| 500 (Internal Server Error) | Database or Server Error                              |

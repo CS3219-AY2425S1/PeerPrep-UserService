@@ -54,11 +54,11 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 - Body: Required: username (string), email (string), password (string)
 
-```
+```json
 {
   "username": "SampleUserName",
   "email": "sample@gmail.com",
-  "password": "SecurePassword",
+  "password": "SecurePassword"
 }
 ```
 
@@ -81,9 +81,9 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 - Body: Required: email (string)
 
-```
+```json
 {
-  "email": "sample@gmail.com",
+  "email": "sample@gmail.com"
 }
 ```
 
@@ -148,9 +148,9 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 - Body: Required: email (string)
 
-```
+```json
 {
-  "email": "sample@gmail.com",
+  "email": "sample@gmail.com"
 }
 ```
 
@@ -185,12 +185,12 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 - Body: Required: id (string), username (string), email (string), password (string)
 
-```
+```json
 {
   "id": "SampleId",
   "username": "SampleUserName",
   "email": "sample@gmail.com",
-  "password": "SecurePassword",
+  "password": "SecurePassword"
 }
 ```
 
@@ -226,7 +226,7 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 - Body: Required: email (string), isAdmin (boolean)
 
-```
+```json
 {
   "email": "sample@gmail.com",
   "isAdmin": "true"

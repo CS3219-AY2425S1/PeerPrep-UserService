@@ -47,23 +47,22 @@
 - Body
   - Required: `username` (string), `email` (string), `password` (string)
 
-
-```json
-{
-  "username": "SampleUserName",
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
-}
-```
+    ```json
+    {
+      "username": "SampleUserName",
+      "email": "sample@gmail.com",
+      "password": "SecurePassword"
+    }
+    ```
 
 - Responses:
 
-| Response Code               | Explanation                                           |
-| --------------------------- | ----------------------------------------------------- |
-| 201 (Created)               | User created successfully, created user data returned |
-| 400 (Bad Request)           | Missing fields                                        |
-| 409 (Conflict)              | Duplicate username or email encountered               |
-| 500 (Internal Server Error) | Database or server error                              |
+    | Response Code               | Explanation                                           |
+    |-----------------------------|-------------------------------------------------------|
+    | 201 (Created)               | User created successfully, created user data returned |
+    | 400 (Bad Request)           | Missing fields                                        |
+    | 409 (Conflict)              | Duplicate username or email encountered               |
+    | 500 (Internal Server Error) | Database or server error                              |
 
 ### Get User
 
@@ -93,13 +92,13 @@
     
 - Responses:
 
-| Response Code               | Explanation                                              |
-| --------------------------- | -------------------------------------------------------- |
-| 200 (OK)                    | Success, user data returned                              |
-| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT         |
-| 403 (Forbidden)             | Access denied for non-admin users accessing others' data |
-| 404 (Not Found)             | User with the specified ID not found                     |
-| 500 (Internal Server Error) | Database or server error                                 |
+    | Response Code               | Explanation                                              |
+    |-----------------------------|----------------------------------------------------------|
+    | 200 (OK)                    | Success, user data returned                              |
+    | 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT         |
+    | 403 (Forbidden)             | Access denied for non-admin users accessing others' data |
+    | 404 (Not Found)             | User with the specified ID not found                     |
+    | 500 (Internal Server Error) | Database or server error                                 |
 
 ### Get All Users
 
@@ -116,12 +115,12 @@
 
 - Responses:
 
-| Response Code               | Explanation                                      |
-| --------------------------- | ------------------------------------------------ |
-| 200 (OK)                    | Success, all user data returned                  |
-| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT |
-| 403 (Forbidden)             | Access denied for non-admin users                |
-| 500 (Internal Server Error) | Database or server error                         |
+    | Response Code               | Explanation                                      |
+    |-----------------------------|--------------------------------------------------|
+    | 200 (OK)                    | Success, all user data returned                  |
+    | 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT |
+    | 403 (Forbidden)             | Access denied for non-admin users                |
+    | 500 (Internal Server Error) | Database or server error                         |
 
 ### Update User
 
@@ -137,14 +136,13 @@
 - Body
   - At least one of the following fields is required: `username` (string), `email` (string), `password` (string)
 
-
-```json
-{
-  "username": "SampleUserName",
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
-}
-```
+    ```json
+    {
+      "username": "SampleUserName",
+      "email": "sample@gmail.com",
+      "password": "SecurePassword"
+    }
+    ```
 
 - Headers
     - Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
@@ -156,15 +154,15 @@
 
 - Responses:
 
-| Response Code               | Explanation                                             |
-| --------------------------- | ------------------------------------------------------- |
-| 200 (OK)                    | User updated successfully, updated user data returned   |
-| 400 (Bad Request)           | Missing fields                                          |
-| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT        |
-| 403 (Forbidden)             | Access denied for non-admin users updating others' data |
-| 404 (Not Found)             | User with the specified ID not found                    |
-| 409 (Conflict)              | Duplicate username or email encountered                 |
-| 500 (Internal Server Error) | Database or server error                                |
+    | Response Code               | Explanation                                             |
+    |-----------------------------|---------------------------------------------------------|
+    | 200 (OK)                    | User updated successfully, updated user data returned   |
+    | 400 (Bad Request)           | Missing fields                                          |
+    | 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT        |
+    | 403 (Forbidden)             | Access denied for non-admin users updating others' data |
+    | 404 (Not Found)             | User with the specified ID not found                    |
+    | 409 (Conflict)              | Duplicate username or email encountered                 |
+    | 500 (Internal Server Error) | Database or server error                                |
 
 ### Update User Privilege
 
@@ -180,12 +178,11 @@
 - Body
   - Required: `isAdmin` (boolean)
 
-
-```json
-{
-  "isAdmin": true
-}
-```
+    ```json
+    {
+      "isAdmin": true
+    }
+    ```
 
 - Headers
     - Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
@@ -194,32 +191,27 @@
         - Admin users: Can update any user's privilege. The server verifies the user associated with the JWT token is an admin user and allows the privilege update.
         - Non-admin users: Not allowed access.
 
-
-> 💡 You may need to manually assign admin status to the first user by directly editing the database document before using this endpoint.
+    > 💡 You may need to manually assign admin status to the first user by directly editing the database document before using this endpoint.
 
 - Responses:
 
-| Response Code               | Explanation                                                  |
-| --------------------------- | ------------------------------------------------------------ |
-| 200 (OK)                    | User privilege updated successfully, updated user data returned |
-| 400 (Bad Request)           | Missing fields                                               |
-| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT             |
-| 403 (Forbidden)             | Access denied for non-admin users                            |
-| 404 (Not Found)             | User with the specified ID not found                         |
-| 500 (Internal Server Error) | Database or server error                                     |
+    | Response Code               | Explanation                                                     |
+    |-----------------------------|-----------------------------------------------------------------|
+    | 200 (OK)                    | User privilege updated successfully, updated user data returned |
+    | 400 (Bad Request)           | Missing fields                                                  |
+    | 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT                |
+    | 403 (Forbidden)             | Access denied for non-admin users                               |
+    | 404 (Not Found)             | User with the specified ID not found                            |
+    | 500 (Internal Server Error) | Database or server error                                        |
 
 ### Delete User
 
 - This endpoint allows deletion of a user and their related data from the database using the user's ID.
-
 - HTTP Method: `DELETE`
-
 - Endpoint: http://localhost:3001/users/{userId}
-
 - Parameters
 
   - Required: `userId` path parameter
-
 - Headers
 
   - Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
@@ -229,16 +221,15 @@
     - Admin users: Can delete any user's data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested user's data.
 
     - Non-admin users: Can only delete their own data. The server checks if the user ID in the request URL matches the ID of the user associated with the JWT token. If it matches, the server deletes the user's own data.
-
 - Responses:
 
-| Response Code               | Explanation                                             |
-| --------------------------- | ------------------------------------------------------- |
-| 200 (OK)                    | User deleted successfully                               |
-| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT        |
-| 403 (Forbidden)             | Access denied for non-admin users deleting others' data |
-| 404 (Not Found)             | User with the specified ID not found                    |
-| 500 (Internal Server Error) | Database or server error                                |
+    | Response Code               | Explanation                                             |
+    |-----------------------------|---------------------------------------------------------|
+    | 200 (OK)                    | User deleted successfully                               |
+    | 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT        |
+    | 403 (Forbidden)             | Access denied for non-admin users deleting others' data |
+    | 404 (Not Found)             | User with the specified ID not found                    |
+    | 500 (Internal Server Error) | Database or server error                                |
 
 ### Login
 
@@ -248,22 +239,21 @@
 - Body
   - Required: `email` (string), `password` (string)
 
-
-```json
-{
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
-}
-```
+    ```json
+    {
+      "email": "sample@gmail.com",
+      "password": "SecurePassword"
+    }
+    ```
 
 - Responses:
 
-| Response Code               | Explanation                                        |
-| --------------------------- | -------------------------------------------------- |
-| 200 (OK)                    | Login successful, JWT token and user data returned |
-| 400 (Bad Request)           | Missing fields                                     |
-| 401 (Unauthorized)          | Incorrect email or password                        |
-| 500 (Internal Server Error) | Database or server error                           |
+    | Response Code               | Explanation                                        |
+    |-----------------------------|----------------------------------------------------|
+    | 200 (OK)                    | Login successful, JWT token and user data returned |
+    | 400 (Bad Request)           | Missing fields                                     |
+    | 401 (Unauthorized)          | Incorrect email or password                        |
+    | 500 (Internal Server Error) | Database or server error                           |
 
 ### Verify Token
 
@@ -275,8 +265,8 @@
 
 - Responses:
 
-| Response Code               | Explanation                                        |
-| --------------------------- | -------------------------------------------------- |
-| 200 (OK)                    | Token verified, authenticated user's data returned |
-| 401 (Unauthorized)          | Missing/invalid/expired JWT                        |
-| 500 (Internal Server Error) | Database or server error                           |
+    | Response Code               | Explanation                                        |
+    |-----------------------------|----------------------------------------------------|
+    | 200 (OK)                    | Token verified, authenticated user's data returned |
+    | 401 (Unauthorized)          | Missing/invalid/expired JWT                        |
+    | 500 (Internal Server Error) | Database or server error                           |

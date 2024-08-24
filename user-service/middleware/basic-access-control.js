@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { ormFindUserByEmail } from "../model/user-orm.js";
+import { findUserByEmail as _findUserByEmail } from "../model/repository.js";
 
 export function verifyAccessToken(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -15,7 +15,7 @@ export function verifyAccessToken(req, res, next) {
     }
 
     // load latest user info from DB
-    const dbUser = await ormFindUserByEmail(user.email);
+    const dbUser = await _findUserByEmail(user.email);
     if (!dbUser) {
       return res.status(401).json({ message: "Authentication failed" });
     }

@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { ormFindUserByEmail } from "../model/user-orm.js";
+import { findUserByEmail as _findUserByEmail } from "../model/repository.js";
 
 export async function handleLogin(req, res) {
   const { email, password } = req.body;
   if (email && password) {
     try {
-      const user = await ormFindUserByEmail(email);
+      const user = await _findUserByEmail(email);
       if (!user) {
         return res.status(401).json({ message: "Wrong email and/or password" });
       }

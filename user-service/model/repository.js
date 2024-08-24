@@ -1,6 +1,6 @@
 import UserModel from "./user-model.js";
 import "dotenv/config";
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 
 export async function connectToDB() {
   let mongoDBUri =
@@ -8,23 +8,32 @@ export async function connectToDB() {
       ? process.env.DB_CLOUD_URI
       : process.env.DB_LOCAL_URI;
 
-  await mongoose.connect(mongoDBUri);
+  await connect(mongoDBUri);
 }
 
-export async function createUser(params) {
-  return new UserModel(params).save();
-}
-
-export async function deleteUser(userId) {
-  return UserModel.findByIdAndDelete(userId);
+export async function createUser(username, email, password) {
+  return new UserModel({ username, email, password }).save();
 }
 
 export async function findUserByEmail(email) {
-  return UserModel.findOne({ email: email });
+  return UserModel.findOne({ email });
 }
 
 export async function findUserById(userId) {
   return UserModel.findById(userId);
+}
+
+export async function findUserByUsernameOrEmail(username, email) {
+  return UserModel.findOne({
+    $or: [
+      { username },
+      { email },
+    ],
+  });
+}
+
+export async function findAllUsers() {
+  return UserModel.find();
 }
 
 export async function updateUserById(userId, username, email, password) {
@@ -32,9 +41,9 @@ export async function updateUserById(userId, username, email, password) {
     userId,
     {
       $set: {
-        username: username,
-        email: email,
-        password: password,
+        username,
+        email,
+        password,
       },
     },
   );
@@ -45,12 +54,12 @@ export async function updateUserPrivilegeById(userId, isAdmin) {
     userId,
     {
       $set: {
-        isAdmin: isAdmin,
+        isAdmin,
       },
     },
   );
 }
 
-export async function findAllUsers() {
-  return UserModel.find();
+export async function deleteUserById(userId) {
+  return UserModel.findByIdAndDelete(userId);
 }

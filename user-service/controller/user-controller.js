@@ -1,11 +1,13 @@
 import bcrypt from "bcrypt";
 import { isValidObjectId } from "mongoose";
 import {
-  findUserByUsernameOrEmail as _findUserByUsernameOrEmail,
   createUser as _createUser,
-  findUserById as _findUserById,
-  findAllUsers as _findAllUsers,
   deleteUserById as _deleteUserById,
+  findAllUsers as _findAllUsers,
+  findUserByEmail as _findUserByEmail,
+  findUserById as _findUserById,
+  findUserByUsername as _findUserByUsername,
+  findUserByUsernameOrEmail as _findUserByUsernameOrEmail,
   updateUserById as _updateUserById,
   updateUserPrivilegeById as _updateUserPrivilegeById,
 } from "../model/repository.js";
@@ -21,8 +23,11 @@ export async function createUser(req, res) {
 
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
-      await _createUser(username, email, hashedPassword);
-      return res.status(201).json({ message: `Created new user ${username} successfully` });
+      const createdUser = await _createUser(username, email, hashedPassword);
+      return res.status(201).json({
+        message: `Created new user ${username} successfully`,
+        data: formatUserResponse(createdUser),
+      });
     } else {
       return res.status(400).json({ message: "username and/or email and/or password are missing" });
     }
@@ -39,11 +44,11 @@ export async function getUser(req, res) {
       return res.status(404).json({ message: `User ${userId} not found` });
     }
 
-    const response = await _findUserById(userId);
-    if (!response) {
+    const user = await _findUserById(userId);
+    if (!user) {
       return res.status(404).json({ message: `User ${userId} not found` });
     } else {
-      return res.status(200).json({ message: `Found user`, userDetails: response });
+      return res.status(200).json({ message: `Found user`, data: formatUserResponse(user) });
     }
   } catch (err) {
     console.error(err);
@@ -55,7 +60,7 @@ export async function getAllUsers(req, res) {
   try {
     const users = await _findAllUsers();
 
-    return res.status(200).json({ message: `Found users`, users: users });
+    return res.status(200).json({ message: `Found users`, data: users.map(formatUserResponse) });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Unknown error when getting all users!" });
@@ -75,9 +80,13 @@ export async function updateUser(req, res) {
         return res.status(404).json({ message: `User ${userId} not found` });
       }
       if (username || email) {
-        const existingUser = await _findUserByUsernameOrEmail(username, email);
-        if (existingUser) {
-          return res.status(409).json({ message: "username or email already exists" });
+        let existingUser = await _findUserByUsername(username);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(409).json({ message: "username already exists" });
+        }
+        existingUser = await _findUserByEmail(email);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(409).json({ message: "email already exists" });
         }
       }
 
@@ -86,8 +95,11 @@ export async function updateUser(req, res) {
         const salt = bcrypt.genSaltSync(10);
         hashedPassword = bcrypt.hashSync(password, salt);
       }
-      await _updateUserById(userId, username, email, hashedPassword);
-      return res.status(200).json({ message: `Updated data for user ${userId}` });
+      const updatedUser = await _updateUserById(userId, username, email, hashedPassword);
+      return res.status(200).json({
+        message: `Updated data for user ${userId}`,
+        data: formatUserResponse(updatedUser),
+      });
     } else {
       return res.status(400).json({ message: "No field to update: username and email and password are all missing!" });
     }
@@ -111,8 +123,11 @@ export async function updateUserPrivilege(req, res) {
         return res.status(404).json({ message: `User ${userId} not found` });
       }
 
-      await _updateUserPrivilegeById(userId, isAdmin === true);
-      return res.status(200).json({ message: `Updated privilege for user ${userId}` });
+      const updatedUser = await _updateUserPrivilegeById(userId, isAdmin === true);
+      return res.status(200).json({
+        message: `Updated privilege for user ${userId}`,
+        data: formatUserResponse(updatedUser),
+      });
     } else {
       return res.status(400).json({ message: "isAdmin is missing!" });
     }
@@ -139,4 +154,14 @@ export async function deleteUser(req, res) {
     console.error(err);
     return res.status(500).json({ message: "Unknown error when deleting user!" });
   }
+}
+
+export function formatUserResponse(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    createdAt: user.createdAt,
+  };
 }

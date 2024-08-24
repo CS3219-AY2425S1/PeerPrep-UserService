@@ -58,12 +58,12 @@
 
 - Responses:
 
-| Response Code               | Result                                  |
-| --------------------------- | --------------------------------------- |
-| 201 (Created)               | User Created Successfully               |
-| 400 (Bad Request)           | Missing Fields                          |
-| 409 (Conflict)              | Duplicate Username or Email Encountered |
-| 500 (Internal Server Error) | Database or Server Error                |
+| Response Code               | Explanation                                           |
+| --------------------------- | ----------------------------------------------------- |
+| 201 (Created)               | User created successfully, created user data returned |
+| 400 (Bad Request)           | Missing fields                                        |
+| 409 (Conflict)              | Duplicate username or email encountered               |
+| 500 (Internal Server Error) | Database or server error                              |
 
 ### Get User
 
@@ -93,13 +93,13 @@
     
 - Responses:
 
-| Response Code               | Result                                                   |
+| Response Code               | Explanation                                              |
 | --------------------------- | -------------------------------------------------------- |
-| 200 (OK)                    | User Data Obtained                                       |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT         |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Accessing Others' Data |
-| 404 (Not Found)             | User with the Specified ID Not Found                     |
-| 500 (Internal Server Error) | Database or Server Error                                 |
+| 200 (OK)                    | Success, user data returned                              |
+| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT         |
+| 403 (Forbidden)             | Access denied for non-admin users accessing others' data |
+| 404 (Not Found)             | User with the specified ID not found                     |
+| 500 (Internal Server Error) | Database or server error                                 |
 
 ### Get All Users
 
@@ -116,45 +116,12 @@
 
 - Responses:
 
-| Response Code      | Result                                           |
-|--------------------|--------------------------------------------------|
-| 200 (OK)           | Users Data Obtained                              |
-| 400 (Bad Request)  | Database or Server Error                         |
-| 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
-| 403 (Forbidden)    | Access Denied for Non-admin Users                |
-| 404 (Not Found)    | No Users Exist                                   |
-
-### Delete User
-
-- This endpoint allows deletion of a user and their related data from the database using the user's ID.
-
-- HTTP Method: `DELETE`
-
-- Endpoint: http://localhost:3001/users/{userId}
-
-- Parameters
-
-  - Required: `userId` path parameter
-
-- Headers
-
-  - Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
-
-  - Auth Rules:
-
-      - Admin users: Can delete any user's data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested user's data.
-        
-      - Non-admin users: Can only delete their own data. The server checks if the user ID in the request URL matches the ID of the user associated with the JWT token. If it matches, the server deletes the user's own data.
-
-- Responses:
-
-| Response Code               | Result                                                  |
-| --------------------------- | ------------------------------------------------------- |
-| 200 (OK)                    | User Deleted Successfully                               |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Deleting Others' Data |
-| 404 (Not Found)             | User with the Specified ID Not Found                    |
-| 500 (Internal Server Error) | Database or Server Error                                |
+| Response Code               | Explanation                                      |
+| --------------------------- | ------------------------------------------------ |
+| 200 (OK)                    | Success, all user data returned                  |
+| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT |
+| 403 (Forbidden)             | Access denied for non-admin users                |
+| 500 (Internal Server Error) | Database or server error                         |
 
 ### Update User
 
@@ -189,15 +156,15 @@
 
 - Responses:
 
-| Response Code               | Result                                                  |
+| Response Code               | Explanation                                             |
 | --------------------------- | ------------------------------------------------------- |
-| 200 (OK)                    | User Updated Successfully                               |
-| 400 (Bad Request)           | Missing Fields                                          |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Updating Others' Data |
-| 404 (Not Found)             | User with the Specified ID Not Found                    |
-| 409 (Conflict)              | Duplicate Username or Email Encountered                 |
-| 500 (Internal Server Error) | Database or Server Error                                |
+| 200 (OK)                    | User updated successfully, updated user data returned   |
+| 400 (Bad Request)           | Missing fields                                          |
+| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT        |
+| 403 (Forbidden)             | Access denied for non-admin users updating others' data |
+| 404 (Not Found)             | User with the specified ID not found                    |
+| 409 (Conflict)              | Duplicate username or email encountered                 |
+| 500 (Internal Server Error) | Database or server error                                |
 
 ### Update User Privilege
 
@@ -232,14 +199,46 @@
 
 - Responses:
 
-| Response Code               | Result                                           |
-| --------------------------- | ------------------------------------------------ |
-| 200 (OK)                    | User Privilege Updated Successfully              |
-| 400 (Bad Request)           | Missing Fields                                   |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT |
-| 403 (Forbidden)             | Access Denied for Non-admin Users                |
-| 404 (Not Found)             | User with the Specified ID Not Found             |
-| 500 (Internal Server Error) | Database or Server Error                         |
+| Response Code               | Explanation                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| 200 (OK)                    | User privilege updated successfully, updated user data returned |
+| 400 (Bad Request)           | Missing fields                                               |
+| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT             |
+| 403 (Forbidden)             | Access denied for non-admin users                            |
+| 404 (Not Found)             | User with the specified ID not found                         |
+| 500 (Internal Server Error) | Database or server error                                     |
+
+### Delete User
+
+- This endpoint allows deletion of a user and their related data from the database using the user's ID.
+
+- HTTP Method: `DELETE`
+
+- Endpoint: http://localhost:3001/users/{userId}
+
+- Parameters
+
+  - Required: `userId` path parameter
+
+- Headers
+
+  - Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Auth Rules:
+
+    - Admin users: Can delete any user's data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested user's data.
+
+    - Non-admin users: Can only delete their own data. The server checks if the user ID in the request URL matches the ID of the user associated with the JWT token. If it matches, the server deletes the user's own data.
+
+- Responses:
+
+| Response Code               | Explanation                                             |
+| --------------------------- | ------------------------------------------------------- |
+| 200 (OK)                    | User deleted successfully                               |
+| 401 (Unauthorized)          | Access denied due to missing/invalid/expired JWT        |
+| 403 (Forbidden)             | Access denied for non-admin users deleting others' data |
+| 404 (Not Found)             | User with the specified ID not found                    |
+| 500 (Internal Server Error) | Database or server error                                |
 
 ### Login
 
@@ -259,12 +258,12 @@
 
 - Responses:
 
-| Response Code               | Result                      |
-|-----------------------------|-----------------------------|
-| 200 (OK)                    | Login Successful            |
-| 400 (Bad Request)           | Missing Fields              |
-| 401 (Unauthorized)          | Incorrect Email or Password |
-| 500 (Internal Server Error) | Database or Server Error    |
+| Response Code               | Explanation                                        |
+| --------------------------- | -------------------------------------------------- |
+| 200 (OK)                    | Login successful, JWT token and user data returned |
+| 400 (Bad Request)           | Missing fields                                     |
+| 401 (Unauthorized)          | Incorrect email or password                        |
+| 500 (Internal Server Error) | Database or server error                           |
 
 ### Verify Token
 
@@ -276,8 +275,8 @@
 
 - Responses:
 
-| Response Code               | Result                                                |
-|-----------------------------|-------------------------------------------------------|
-| 200 (OK)                    | Token Verified and Authenticated User's Data Obtained |
-| 401 (Unauthorized)          | Missing/Invalid/Expired JWT                           |
-| 500 (Internal Server Error) | Database or Server Error                              |
+| Response Code               | Explanation                                        |
+| --------------------------- | -------------------------------------------------- |
+| 200 (OK)                    | Token verified, authenticated user's data returned |
+| 401 (Unauthorized)          | Missing/invalid/expired JWT                        |
+| 500 (Internal Server Error) | Database or server error                           |

@@ -19,17 +19,21 @@ export async function createUser(params) {
   return new UserModel(params).save();
 }
 
-export async function deleteUser(email) {
-  return UserModel.deleteOne({ email: email });
+export async function deleteUser(userId) {
+  return UserModel.findByIdAndDelete(userId);
 }
 
 export async function findUserByEmail(email) {
   return UserModel.findOne({ email: email });
 }
 
-export async function updateUser(id, username, email, password) {
-  return UserModel.updateOne(
-    { _id: id },
+export async function findUserById(userId) {
+  return UserModel.findById(userId);
+}
+
+export async function updateUserById(userId, username, email, password) {
+  return UserModel.findByIdAndUpdate(
+    userId,
     {
       $set: {
         username: username,
@@ -40,9 +44,9 @@ export async function updateUser(id, username, email, password) {
   );
 }
 
-export async function updateUserPrivilege(email, isAdmin) {
-  return UserModel.updateOne(
-    { email: email },
+export async function updateUserPrivilegeById(userId, isAdmin) {
+  return UserModel.findByIdAndUpdate(
+    userId,
     {
       $set: {
         isAdmin: isAdmin,

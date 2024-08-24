@@ -3,8 +3,9 @@ import {
   deleteUser,
   findAllUsers,
   findUserByEmail,
-  updateUser,
-  updateUserPrivilege,
+  findUserById,
+  updateUserById,
+  updateUserPrivilegeById,
 } from "./repository.js";
 
 export async function ormCreateUser(username, email, password) {
@@ -17,9 +18,9 @@ export async function ormCreateUser(username, email, password) {
   }
 }
 
-export async function ormDeleteUser(email) {
+export async function ormDeleteUserById(userId) {
   try {
-    const result = await deleteUser(email);
+    const result = await deleteUser(userId);
 
     // Checking if User existed
     if (result.deletedCount === 0) {
@@ -35,24 +36,25 @@ export async function ormDeleteUser(email) {
 
 export async function ormFindUserByEmail(email) {
   try {
-    const result = await findUserByEmail(email);
-
-    // Checking if User exists
-    if (result) {
-      return result;
-    }
-
-    return null;
+    return await findUserByEmail(email);
   } catch (err) {
     console.log("ERROR: Could not find user");
     return { err };
   }
 }
 
-export async function ormUpdateUser(id, username, email, password) {
+export async function ormFindUserById(userId) {
   try {
-    const result = await updateUser(id, username, email, password);
-    console.log(result);
+    return await findUserById(userId);
+  } catch (err) {
+    console.log("ERROR: Could not find user");
+    return { err };
+  }
+}
+
+export async function ormUpdateUserById(id, username, email, password) {
+  try {
+    const result = await updateUserById(id, username, email, password);
 
     // Checking if User Details Modified
     if (result.modifiedCount === 0) {
@@ -66,9 +68,9 @@ export async function ormUpdateUser(id, username, email, password) {
   }
 }
 
-export async function ormUpdateUserPrivilege(email, isAdmin) {
+export async function ormUpdateUserPrivilegeById(userId, isAdmin) {
   try {
-    const result = await updateUserPrivilege(email, isAdmin);
+    const result = await updateUserPrivilegeById(userId, isAdmin);
 
     // Checking if User Details Modified
     if (result.modifiedCount === 0) {

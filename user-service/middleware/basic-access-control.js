@@ -33,28 +33,14 @@ export function verifyIsAdmin(req, res, next) {
   }
 }
 
-export function verifyEmail(req, res, next) {
+export function verifyIsOwnerOrAdmin(req, res, next) {
   if (req.user.isAdmin) {
     return next();
   }
 
-  const userEmailFromBody = req.body.email;
-  const userEmailFromToken = req.user.email;
-  if (userEmailFromBody === userEmailFromToken) {
-    return next();
-  }
-
-  return res.status(403).json({ message: "Not authorized to access this resource" });
-}
-
-export function verifyId(req, res, next) {
-  if (req.user.isAdmin) {
-    return next();
-  }
-
-  const userIdFromBody = req.body.id;
+  const userIdFromReqParams = req.params.id;
   const userIdFromToken = req.user.id;
-  if (userIdFromBody === userIdFromToken) {
+  if (userIdFromReqParams === userIdFromToken) {
     return next();
   }
 

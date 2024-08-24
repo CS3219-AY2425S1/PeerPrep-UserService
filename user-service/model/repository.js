@@ -1,19 +1,15 @@
 import UserModel from "./user-model.js";
 import "dotenv/config";
-
-// Set up mongoose connection
 import mongoose from "mongoose";
 
-let mongoDBUri =
-  process.env.ENV === "PROD"
-    ? process.env.DB_CLOUD_URI
-    : process.env.DB_LOCAL_URI;
+export async function connectToDB() {
+  let mongoDBUri =
+    process.env.ENV === "PROD"
+      ? process.env.DB_CLOUD_URI
+      : process.env.DB_LOCAL_URI;
 
-mongoose.connect(mongoDBUri);
-
-let db = mongoose.connection;
-db.on("connected", () => console.log("MongoDB Connected!"));
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+  await mongoose.connect(mongoDBUri);
+}
 
 export async function createUser(params) {
   return new UserModel(params).save();

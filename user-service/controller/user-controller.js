@@ -13,10 +13,10 @@ export async function createUser(req, res) {
   try {
     const { username, email, password } = req.body;
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    if (username && email && password) {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(password, salt);
 
-    if (username && email && hashedPassword) {
       console.log(`CREATE USER: Email Obtained: ${email}`);
       const resp = await _createUser(username, email, hashedPassword);
       console.log(resp);
@@ -113,10 +113,10 @@ export async function updateUser(req, res) {
   try {
     const { id, username, email, password } = req.body;
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    if (id && username && email && password) {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(password, salt);
 
-    if (id && username && email && hashedPassword) {
       console.log(`UPDATE USER: ID Obtained: ${id}`);
       const response = await _updateUser(id, username, email, hashedPassword);
       console.log(response);

@@ -9,8 +9,7 @@ import {
 
 export async function ormCreateUser(username, email, password) {
   try {
-    const newUser = await createUser({ username, email, password });
-    await newUser.save();
+    await createUser({ username, email, password });
     return true;
   } catch (err) {
     console.log("ERROR: Could not create new user");
@@ -70,7 +69,6 @@ export async function ormUpdateUser(id, username, email, password) {
 export async function ormUpdateUserPrivilege(email, isAdmin) {
   try {
     const result = await updateUserPrivilege(email, isAdmin);
-    console.log(result);
 
     // Checking if User Details Modified
     if (result.modifiedCount === 0) {

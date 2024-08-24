@@ -16,9 +16,7 @@ db.on("connected", () => console.log("MongoDB Connected!"));
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export async function createUser(params) {
-  params._id = new mongoose.Types.ObjectId();
-
-  return new UserModel(params);
+  return new UserModel(params).save();
 }
 
 export async function deleteUser(email) {

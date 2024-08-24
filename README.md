@@ -3,7 +3,7 @@
 ## User Service
 
 ### Quick Start
-1. Rename `.env.sample` file to `.env`.
+1. Create a copy of the `.env.sample` file and name it `.env`.
 2. Create a Cloud DB URL using Mongo Atlas.
 3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
 4. Install npm packages using `npm i`.

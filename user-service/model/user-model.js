@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-let UserModelSchema = new Schema({
+const UserModelSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   username: {
     type: String,

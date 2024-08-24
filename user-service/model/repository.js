@@ -1,18 +1,15 @@
 import UserModel from "./user-model.js";
 import "dotenv/config";
 
-//Set up mongoose connection
+// Set up mongoose connection
 import mongoose from "mongoose";
 
 let mongoDBUri =
-  process.env.ENV == "PROD"
+  process.env.ENV === "PROD"
     ? process.env.DB_CLOUD_URI
     : process.env.DB_LOCAL_URI;
 
-mongoose.connect(mongoDBUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(mongoDBUri);
 
 let db = mongoose.connection;
 db.on("connected", () => console.log("MongoDB Connected!"));
@@ -41,7 +38,7 @@ export async function updateUser(id, username, email, password) {
         email: email,
         password: password,
       },
-    }
+    },
   );
 }
 
@@ -52,7 +49,7 @@ export async function updateUserPrivilege(email, isAdmin) {
       $set: {
         isAdmin: isAdmin,
       },
-    }
+    },
   );
 }
 

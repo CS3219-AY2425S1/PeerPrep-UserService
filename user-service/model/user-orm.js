@@ -1,13 +1,12 @@
 import {
   createUser,
   deleteUser,
+  findAllUsers,
   findUserByEmail,
   updateUser,
   updateUserPrivilege,
-  findAllUsers,
 } from "./repository.js";
 
-//need to separate orm functions from repository to decouple business logic from persistence
 export async function ormCreateUser(username, email, password) {
   try {
     const newUser = await createUser({ username, email, password });

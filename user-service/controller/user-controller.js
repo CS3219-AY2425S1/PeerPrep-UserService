@@ -1,9 +1,11 @@
-import { ormCreateUser as _createUser } from "../model/user-orm.js";
-import { ormDeleteUser as _deleteUser } from "../model/user-orm.js";
-import { ormFindUserByEmail as _findUserByEmail } from "../model/user-orm.js";
-import { ormUpdateUser as _updateUser } from "../model/user-orm.js";
-import { ormUpdateUserPrivilege as _updateUserPrivilege } from "../model/user-orm.js";
-import { ormFindAllUsers as _findAllUsers } from "../model/user-orm.js";
+import {
+  ormCreateUser as _createUser,
+  ormDeleteUser as _deleteUser,
+  ormFindAllUsers as _findAllUsers,
+  ormFindUserByEmail as _findUserByEmail,
+  ormUpdateUser as _updateUser,
+  ormUpdateUserPrivilege as _updateUserPrivilege,
+} from "../model/user-orm.js";
 
 import bcrypt from "bcrypt";
 
@@ -35,9 +37,10 @@ export async function createUser(req, res) {
       });
     }
   } catch (err) {
+    console.error(err);
     return res
       .status(500)
-      .json({ message: "Database failure when creating new user!" });
+      .json({ message: "Unknown error when creating new user!" });
   }
 }
 
@@ -69,7 +72,7 @@ export async function deleteUser(req, res) {
   } catch (err) {
     return res
       .status(500)
-      .json({ message: "Database failure when deleting user!" });
+      .json({ message: "Unknown error when deleting user!" });
   }
 }
 
@@ -102,7 +105,7 @@ export async function getUserByEmail(req, res) {
   } catch (err) {
     return res
       .status(500)
-      .json({ message: "Database failure when getting user!" });
+      .json({ message: "Unknown error when getting user!" });
   }
 }
 
@@ -142,7 +145,7 @@ export async function updateUser(req, res) {
     console.log(err);
     return res.status(500).json({
       message:
-        "Database failure when updating user! (Possibly Missing Password field)",
+        "Unknown error when updating user! (Possibly Missing Password field)",
     });
   }
 }
@@ -178,7 +181,7 @@ export async function updateUserPrivilege(req, res) {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "Database failure when updating user!",
+      message: "Unknown error when updating user!",
     });
   }
 }

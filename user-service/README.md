@@ -191,7 +191,6 @@
         - Admin users: Can update any user's privilege. The server verifies the user associated with the JWT token is an admin user and allows the privilege update.
         - Non-admin users: Not allowed access.
 
-      &nbsp;
       > 💡 You may need to manually assign admin status to the first user by directly editing the database document before using this endpoint.
 
 - Responses:

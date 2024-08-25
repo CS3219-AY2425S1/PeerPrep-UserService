@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { findUserByEmail as _findUserByEmail } from "../model/repository.js";
+import { findUserById as _findUserById } from "../model/repository.js";
 
 export function verifyAccessToken(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -15,7 +15,7 @@ export function verifyAccessToken(req, res, next) {
     }
 
     // load latest user info from DB
-    const dbUser = await _findUserByEmail(user.email);
+    const dbUser = await _findUserById(user.id);
     if (!dbUser) {
       return res.status(401).json({ message: "Authentication failed" });
     }

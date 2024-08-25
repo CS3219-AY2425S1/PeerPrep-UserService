@@ -67,5 +67,5 @@ export async function updateUserPrivilegeById(userId, isAdmin) {
 }
 
 export async function deleteUserById(userId) {
-  UserModel.findByIdAndDelete(userId);
+  return UserModel.findByIdAndDelete(userId);
 }

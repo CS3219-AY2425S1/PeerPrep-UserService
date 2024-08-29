@@ -1,4 +1,4 @@
-# CS3219 AY24/25-Project-Skeleton
+# CS3219 project: PeerPrep
 
 ## User Service
 
